@@ -27,8 +27,8 @@ namespace containers
         };
 
       private:
-        SingleLinkedListElement* next;
         T                        data;
+        SingleLinkedListElement* next;
     };
 
     template <class T>
@@ -36,6 +36,10 @@ namespace containers
     {
       public:
         SingleLinkedList() : head(nullptr) {}
+
+        SingleLinkedList(const SingleLinkedList& other) {
+
+        }
 
         ~SingleLinkedList()
         {
