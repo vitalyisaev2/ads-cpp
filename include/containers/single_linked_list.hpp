@@ -35,15 +35,11 @@ namespace containers
     class SingleLinkedList
     {
       public:
-        SingleLinkedList() : head(nullptr)
-        {
-            std::cout << "constructor: " << this << std::endl;
-        }
+        SingleLinkedList() : head(nullptr) {}
 
         // O(N^2) because of push back
-        SingleLinkedList(const SingleLinkedList& other): head(nullptr)
+        SingleLinkedList(const SingleLinkedList& other) : head(nullptr)
         {
-            std::cout << "copy constructor: " << this << std::endl;
             if (other.head == nullptr)
                 {
                     return;
@@ -56,7 +52,6 @@ namespace containers
 
         ~SingleLinkedList()
         {
-            std::cout << "destructor: " << this << std::endl;
             SingleLinkedListElement<T>* curr = head;
             SingleLinkedListElement<T>* next = nullptr;
             while (curr != nullptr)
@@ -92,11 +87,11 @@ namespace containers
                 {
                     curr = curr->getNext();
                 }
-            std::cout << "push back: " << this << " curr: " << curr << " elem: " << elem << std::endl;
             curr->setNext(elem);
         }
 
-        SingleLinkedListElement<T>* findElem(const T& value)
+        // O(N)
+        SingleLinkedListElement<T>* findElem(const T& value) const
         {
             for (auto curr = head; curr != nullptr; curr = curr->getNext())
                 {
@@ -106,6 +101,30 @@ namespace containers
                         }
                 }
             return nullptr;
+        }
+
+        // O(N)
+        bool operator==(const SingleLinkedList<T>& other) const
+        {
+            auto lhs = head;
+            auto rhs = other.head;
+            while (true)
+                {
+                    if (lhs == nullptr && rhs == nullptr)
+                        {
+                            return true;
+                        }
+                    if ((lhs == nullptr && rhs != nullptr) || (lhs != nullptr && rhs == nullptr))
+                        {
+                            return false;
+                        }
+                    if (lhs->getValue() != rhs->getValue())
+                        {
+                            return false;
+                        }
+                    lhs = lhs->getNext();
+                    rhs = rhs->getNext();
+                }
         }
 
       private:
