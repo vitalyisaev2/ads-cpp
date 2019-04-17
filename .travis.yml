@@ -1,0 +1,27 @@
+dist: xenial
+sudo: required
+language: cpp
+
+os:
+  - linux
+
+compiler:
+  - gcc
+
+before_install:
+  # install Valgrind
+  - sudo apt-get install valgrind 
+  # install Catch framework
+  - mkdir /tmp/Catch2
+  - git clone https://github.com/catchorg/Catch2.git /tmp/Catch2
+  - cd /tmp/Catch2
+  - cmake -Bbuild -H. -DBUILD_TESTING=OFF
+  - sudo cmake --build build/ --target install 
+
+script:
+  - mkdir build
+  - cd build
+  - cmake .. -DCMAKE_BUILD_TYPE=Debug
+  - make VERBOSE=1 -j `nproc`
+  - CTEST_OUTPUT_ON_FAILURE=1 make test
+
