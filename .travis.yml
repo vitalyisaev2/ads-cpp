@@ -9,8 +9,8 @@ compiler:
   - gcc
 
 before_install:
-  # install Valgrind
-  - sudo apt-get install valgrind 
+  # install env deps
+  - sudo apt-get install valgrind cmake
   # install Catch framework
   - mkdir /tmp/Catch2
   - git clone https://github.com/catchorg/Catch2.git /tmp/Catch2
