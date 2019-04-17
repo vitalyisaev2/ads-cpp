@@ -3,15 +3,21 @@
 
 TEST_CASE("SingleLinkedList")
 {
-    SECTION("populate list with some data, check availability")
+    SECTION("pushBack / pushFront / findElem")
     {
-        auto sll = containers::SingleLinkedList<int>();
-        sll.pushFront(1);
-        sll.pushFront(2);
-        sll.pushFront(3);
-        REQUIRE( sll.findElem(1) != nullptr);
-        REQUIRE( sll.findElem(2) != nullptr);
-        REQUIRE( sll.findElem(3) != nullptr);
-        REQUIRE( sll.findElem(4) == nullptr);
+        auto list = containers::SingleLinkedList<int>();
+        list.pushFront(1);
+        list.pushBack(2);
+        REQUIRE( list.findElem(1) != nullptr);
+        REQUIRE( list.findElem(2) != nullptr);
+        REQUIRE( list.findElem(3) == nullptr);
+    }
+
+    SECTION("copy constructor") {
+        auto list1 = containers::SingleLinkedList<int>();
+        list1.pushFront(1);
+        list1.pushFront(2);
+        auto list2(list1);
+        list2.pushFront(3);
     }
 }

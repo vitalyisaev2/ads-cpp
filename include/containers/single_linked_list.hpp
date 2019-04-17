@@ -1,3 +1,5 @@
+#include <iostream>
+
 namespace containers
 {
 
@@ -5,9 +7,7 @@ namespace containers
     class SingleLinkedListElement
     {
       public:
-        SingleLinkedListElement(const T& value, SingleLinkedListElement* predecessor) : data(value), next(predecessor)
-        {
-        }
+        SingleLinkedListElement(const T& value, SingleLinkedListElement* predecessor) : data(value), next(predecessor) {}
         ~SingleLinkedListElement() {}
         SingleLinkedListElement* getNext() const
         {
@@ -35,14 +35,28 @@ namespace containers
     class SingleLinkedList
     {
       public:
-        SingleLinkedList() : head(nullptr) {}
+        SingleLinkedList() : head(nullptr)
+        {
+            std::cout << "constructor: " << this << std::endl;
+        }
 
-        SingleLinkedList(const SingleLinkedList& other) {
-
+        // O(N^2) because of push back
+        SingleLinkedList(const SingleLinkedList& other): head(nullptr)
+        {
+            std::cout << "copy constructor: " << this << std::endl;
+            if (other.head == nullptr)
+                {
+                    return;
+                }
+            for (auto curr = other.head; curr->getNext() != nullptr; curr = curr->getNext())
+                {
+                    this->pushBack(curr->getValue());
+                }
         }
 
         ~SingleLinkedList()
         {
+            std::cout << "destructor: " << this << std::endl;
             SingleLinkedListElement<T>* curr = head;
             SingleLinkedListElement<T>* next = nullptr;
             while (curr != nullptr)
@@ -53,10 +67,33 @@ namespace containers
                 }
         }
 
+        // O(1)
         void pushFront(const T& value)
         {
-            auto curr = new SingleLinkedListElement<T>(value, head);
-            head = curr;
+            auto elem = new SingleLinkedListElement<T>(value, head);
+            head      = elem;
+        }
+
+        // O(N)
+        void pushBack(const T& value)
+        {
+            auto elem = new SingleLinkedListElement<T>(value, nullptr);
+
+            // if head is empty, set new element as head
+            if (head == nullptr)
+                {
+                    head = elem;
+                    return;
+                }
+
+            // rewind to last element
+            auto curr = head;
+            while (curr->getNext() != nullptr)
+                {
+                    curr = curr->getNext();
+                }
+            std::cout << "push back: " << this << " curr: " << curr << " elem: " << elem << std::endl;
+            curr->setNext(elem);
         }
 
         SingleLinkedListElement<T>* findElem(const T& value)
