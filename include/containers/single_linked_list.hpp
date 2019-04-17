@@ -44,8 +44,8 @@ namespace containers
             while (curr != nullptr)
                 {
                     next = curr->getNext();
+                    delete curr;
                     curr = next;
-                    delete next;
                 }
         }
 

@@ -10,8 +10,8 @@ TEST_CASE("SingleLinkedList")
         sll.pushFront(2);
         sll.pushFront(3);
         REQUIRE( sll.findElem(1) != nullptr);
-        // REQUIRE( sll.findElem(2) != nullptr);
-        // REQUIRE( sll.findElem(3) != nullptr);
-        // REQUIRE( sll.findElem(4) == nullptr);
+        REQUIRE( sll.findElem(2) != nullptr);
+        REQUIRE( sll.findElem(3) != nullptr);
+        REQUIRE( sll.findElem(4) == nullptr);
     }
 }

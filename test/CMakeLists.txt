@@ -13,6 +13,13 @@ target_include_directories(
 )
 target_link_libraries(ads_test Catch2::Catch2)
 
+# run tests
 include(CTest)
 include(Catch)
 catch_discover_tests(ads_test)
+
+# run tests under valgrind
+find_program(VALGRIND "valgrind")
+add_test(
+    ads_test_valgrind
+    "${VALGRIND}" --error-exitcode=1 --tool=memcheck --leak-check=yes --run-libc-freeres=no "${CMAKE_CURRENT_BINARY_DIR}/ads_test")
