@@ -14,9 +14,10 @@ before_install:
   # install Catch framework
   - mkdir /tmp/Catch2
   - git clone https://github.com/catchorg/Catch2.git /tmp/Catch2
-  - cd /tmp/Catch2
+  - pushd /tmp/Catch2
   - cmake -Bbuild -H. -DBUILD_TESTING=OFF
   - sudo cmake --build build/ --target install 
+  - popd
 
 script:
   - mkdir build
