@@ -1,9 +1,10 @@
 #include "containers/single_linked_list.hpp"
 #include "catch2/catch.hpp"
+#include "containers/exception.hpp"
 
 TEST_CASE("SingleLinkedList")
 {
-    SECTION("pushBack / pushFront / findElem")
+    SECTION("pushBack / pushFront / findElem / popFront")
     {
         auto list = containers::SingleLinkedList<int>();
         list.pushFront(1);
@@ -11,6 +12,10 @@ TEST_CASE("SingleLinkedList")
         REQUIRE(list.findElem(1) != nullptr);
         REQUIRE(list.findElem(2) != nullptr);
         REQUIRE(list.findElem(3) == nullptr);
+        REQUIRE(list.popFront() == 1);
+        REQUIRE(list.popFront() == 2);
+        // list is empty now
+        REQUIRE_THROWS_AS(list.popFront(), containers::Exception);
     }
 
     SECTION("copy constructor")
