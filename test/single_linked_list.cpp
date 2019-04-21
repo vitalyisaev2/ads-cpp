@@ -9,9 +9,9 @@ TEST_CASE("SingleLinkedList")
         auto list = containers::SingleLinkedList<int>();
         list.pushFront(1);
         list.pushBack(2);
-        REQUIRE(list.findElem(1) != nullptr);
-        REQUIRE(list.findElem(2) != nullptr);
-        REQUIRE(list.findElem(3) == nullptr);
+        REQUIRE(list.exists(1));
+        REQUIRE(list.exists(2));
+        REQUIRE(!list.exists(3));
         REQUIRE(list.popFront() == 1);
         REQUIRE(list.popFront() == 2);
         // list is empty now
