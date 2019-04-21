@@ -18,6 +18,8 @@ namespace containers
         void pushFront(const T& value);
         void pushBack(const T& value);
         T    popFront();
+        void remove(const T& value);
+        void insertAfter(const T& value);
         bool exists(const T& value) const;
         bool operator==(const SingleLinkedList<T>& other) const;
 
@@ -104,6 +106,57 @@ namespace containers
         auto value = last->data;
         delete last;
         return value;
+    }
+
+    template <class T>
+    void SingleLinkedList<T>::remove(const T& value)
+    {
+        if (head == nullptr)
+            {
+                throw Exception(ErrorCode::EMPTY_LINKED_LIST);
+            }
+
+        // head item
+        if (head->data == value)
+            {
+                auto removed = head;
+                head         = head->next;
+                delete removed;
+                return;
+            }
+
+        // seek for target item
+        auto curr = head;
+        while (curr->next != nullptr)
+            {
+                if (curr->next->data == value)
+                    {
+                        // not last item
+                        if (curr->next->next != nullptr)
+                            {
+                                auto removed = curr->next;
+                                curr->next   = curr->next->next;
+                                delete removed;
+                                return;
+                            }
+                        // last item
+                        else
+                            {
+                                auto removed = curr->next;
+                                curr->next   = nullptr;
+                                delete removed;
+                                return;
+                            }
+                    }
+                curr = curr->next;
+            }
+
+        throw Exception(ErrorCode::ITEM_DOES_NOT_EXIST);
+    }
+
+    template <class T>
+    void SingleLinkedList<T>::insertAfter(const T& value)
+    {
     }
 
     // O(N)

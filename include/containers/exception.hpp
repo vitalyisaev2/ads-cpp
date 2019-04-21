@@ -8,9 +8,10 @@ namespace containers
 
     enum ErrorCode
     {
-        RESERVED          = 0,
-        EMPTY_LINKED_LIST = 1,
-        EMPTY_STACK       = 2
+        RESERVED            = 0,
+        EMPTY_LINKED_LIST   = 1,
+        ITEM_DOES_NOT_EXIST = 2,
+        EMPTY_STACK         = 3,
     };
 
     struct Exception : public std::exception
