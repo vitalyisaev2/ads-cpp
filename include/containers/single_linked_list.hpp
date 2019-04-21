@@ -131,22 +131,19 @@ namespace containers
             {
                 if (curr->next->data == value)
                     {
-                        // not last item
+                        auto removed = curr->next;
+                        // middle item
                         if (curr->next->next != nullptr)
                             {
-                                auto removed = curr->next;
-                                curr->next   = curr->next->next;
-                                delete removed;
-                                return;
+                                curr->next = curr->next->next;
                             }
                         // last item
                         else
                             {
-                                auto removed = curr->next;
-                                curr->next   = nullptr;
-                                delete removed;
-                                return;
+                                curr->next = nullptr;
                             }
+                        delete removed;
+                        return;
                     }
                 curr = curr->next;
             }
