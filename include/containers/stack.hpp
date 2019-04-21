@@ -13,34 +13,40 @@ namespace containers
     class Stack
     {
       public:
-        Stack() : list(SingleLinkedList<T>()), size(0){};
-        ~Stack();
+        Stack() : _list(SingleLinkedList<T>()), _size(0){};
+        ~Stack(){};
         void   push(const T& value);
         T      pop();
-        size_t getSize() const;
+        size_t size() const;
 
       private:
-        SingleLinkedList<T> list;
-        size_t              size;
+        SingleLinkedList<T> _list;
+        size_t              _size;
     };
 
     template <class T>
     void Stack<T>::push(const T& value)
     {
-        list.pushFront(value);
-        size++;
+        _list.pushFront(value);
+        _size++;
     }
 
     template <class T>
     T Stack<T>::pop()
     {
-        if (size == 0)
+        if (_size == 0)
             {
-                throw StackException(ErrorCode::EMPTY_STACK);
+                throw Exception(ErrorCode::EMPTY_STACK);
             }
 
-        size--;
-        return list.popFront();
+        _size--;
+        return _list.popFront();
+    }
+
+    template <class T>
+    size_t Stack<T>::size() const
+    {
+        return _size;
     }
 } // namespace containers
 
