@@ -99,4 +99,23 @@ TEST_CASE("SingleLinkedList")
         // removing from empty list causes panic
         REQUIRE_THROWS_AS(list.remove(4), containers::Exception);
     }
+
+    SECTION("reuse emptied list")
+    {
+        containers::SingleLinkedList<int> list;
+        list.pushFront(3);
+        list.pushFront(2);
+        list.pushFront(1);
+        list.remove(2);
+        list.remove(1);
+        list.remove(3);
+        list.pushFront(4);
+        list.pushFront(5);
+        list.pushFront(6);
+        containers::SingleLinkedList<int> expected;
+        expected.pushFront(4);
+        expected.pushFront(5);
+        expected.pushFront(6);
+        REQUIRE(list == expected);
+    }
 }
