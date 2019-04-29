@@ -12,14 +12,14 @@ namespace containers
     class SingleLinkedList
     {
       public:
-        SingleLinkedList() : head(nullptr) {}
+        SingleLinkedList() : _head(nullptr) {}
         SingleLinkedList(const SingleLinkedList& other);
         ~SingleLinkedList();
         void pushFront(const T& value);
         void pushBack(const T& value);
         T    popFront();
         void remove(const T& value);
-        void insertAfter(const T& value);
+        void insertAfter(const T& existingValue, const T& newValue);
         bool exists(const T& value) const;
         bool operator==(const SingleLinkedList<T>& other) const;
 
@@ -32,18 +32,18 @@ namespace containers
         };
 
       private:
-        Element* head;
+        Element* _head;
     };
 
     // O(N^2) because of push back
     template <class T>
-    SingleLinkedList<T>::SingleLinkedList(const SingleLinkedList<T>& other) : head(nullptr)
+    SingleLinkedList<T>::SingleLinkedList(const SingleLinkedList<T>& other) : _head(nullptr)
     {
-        if (other.head == nullptr)
+        if (other._head == nullptr)
             {
                 return;
             }
-        for (auto curr = other.head; curr->next != nullptr; curr = curr->next)
+        for (auto curr = other._head; curr->next != nullptr; curr = curr->next)
             {
                 this->pushBack(curr->data);
             }
@@ -52,7 +52,7 @@ namespace containers
     template <class T>
     SingleLinkedList<T>::~SingleLinkedList()
     {
-        Element* curr = head;
+        Element* curr = _head;
         Element* next = nullptr;
         while (curr != nullptr)
             {
@@ -67,8 +67,8 @@ namespace containers
     void SingleLinkedList<T>::pushFront(const T& value)
     {
 
-        auto elem = new Element(value, head);
-        head      = elem;
+        auto elem = new Element(value, _head);
+        _head     = elem;
     }
 
     // O(N)
@@ -77,15 +77,15 @@ namespace containers
     {
         auto elem = new Element(value, nullptr);
 
-        // if head is empty, set new element as head
-        if (head == nullptr)
+        // if _head is empty, set new element as _head
+        if (_head == nullptr)
             {
-                head = elem;
+                _head = elem;
                 return;
             }
 
         // rewind to last element
-        auto curr = head;
+        auto curr = _head;
         while (curr->next != nullptr)
             {
                 curr = curr->next;
@@ -97,12 +97,12 @@ namespace containers
     template <class T>
     T SingleLinkedList<T>::popFront()
     {
-        if (head == nullptr)
+        if (_head == nullptr)
             {
                 throw Exception(ErrorCode::EMPTY_LINKED_LIST);
             }
-        auto last  = head;
-        head       = last->next;
+        auto last  = _head;
+        _head      = last->next;
         auto value = last->data;
         delete last;
         return value;
@@ -111,22 +111,22 @@ namespace containers
     template <class T>
     void SingleLinkedList<T>::remove(const T& value)
     {
-        if (head == nullptr)
+        if (_head == nullptr)
             {
                 throw Exception(ErrorCode::EMPTY_LINKED_LIST);
             }
 
         // head item
-        if (head->data == value)
+        if (_head->data == value)
             {
-                auto removed = head;
-                head         = head->next;
+                auto removed = _head;
+                _head        = _head->next;
                 delete removed;
                 return;
             }
 
         // seek for target item
-        auto curr = head;
+        auto curr = _head;
         while (curr->next != nullptr)
             {
                 if (curr->next->data == value)
@@ -151,17 +151,32 @@ namespace containers
         throw Exception(ErrorCode::ITEM_DOES_NOT_EXIST);
     }
 
+    // O(N)
     template <class T>
-    void SingleLinkedList<T>::insertAfter(const T& value)
+    void SingleLinkedList<T>::insertAfter(const T& existingValue, const T& newValue)
     {
+        if (_head == nullptr)
+            {
+                throw Exception(ErrorCode::EMPTY_LINKED_LIST);
+            }
+
+        for (auto curr = _head; curr != nullptr; curr = curr->next)
+            {
+                if (curr->data == existingValue)
+                    {
+                        curr->next = new Element(newValue, curr->next);
+                        return;
+                    }
+            }
+
+        throw Exception(ErrorCode::ITEM_DOES_NOT_EXIST);
     }
 
     // O(N)
     template <class T>
     bool SingleLinkedList<T>::exists(const T& value) const
     {
-
-        for (auto curr = head; curr != nullptr; curr = curr->next)
+        for (auto curr = _head; curr != nullptr; curr = curr->next)
             {
                 if (curr->data == value)
                     {
@@ -176,8 +191,8 @@ namespace containers
     bool SingleLinkedList<T>::operator==(const SingleLinkedList<T>& other) const
     {
 
-        auto lhs = head;
-        auto rhs = other.head;
+        auto lhs = _head;
+        auto rhs = other._head;
         while (true)
             {
                 if (lhs == nullptr && rhs == nullptr)

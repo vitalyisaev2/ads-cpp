@@ -38,66 +38,180 @@ TEST_CASE("SingleLinkedList")
         REQUIRE(list1 == list2);
     }
 
-    SECTION("remove front")
+    SECTION("remove")
     {
-        containers::SingleLinkedList<int> list;
-        list.pushFront(3);
-        list.pushFront(2);
-        list.pushFront(1);
-        // remove head
-        list.remove(1);
 
-        containers::SingleLinkedList<int> expected;
-        expected.pushFront(3);
-        expected.pushFront(2);
-        REQUIRE(list == expected);
+        SECTION("3 items, remove last")
+        {
+            containers::SingleLinkedList<int> list;
+            list.pushFront(3);
+            list.pushFront(2);
+            list.pushFront(1);
+            // remove last
+            list.remove(1);
+
+            containers::SingleLinkedList<int> expected;
+            expected.pushFront(3);
+            expected.pushFront(2);
+            REQUIRE(list == expected);
+        }
+
+        SECTION("3 items, remove middle")
+        {
+            containers::SingleLinkedList<int> list;
+            list.pushFront(3);
+            list.pushFront(2);
+            list.pushFront(1);
+            // remove item from middle
+            list.remove(2);
+
+            containers::SingleLinkedList<int> expected;
+            expected.pushFront(3);
+            expected.pushFront(1);
+            REQUIRE(list == expected);
+        }
+
+        SECTION("3 items, remove first")
+        {
+            containers::SingleLinkedList<int> list;
+            list.pushFront(3);
+            list.pushFront(2);
+            list.pushFront(1);
+            // remove item from middle
+            list.remove(3);
+
+            containers::SingleLinkedList<int> expected;
+            expected.pushFront(2);
+            expected.pushFront(1);
+            REQUIRE(list == expected);
+        }
+
+        SECTION("3 items, remove non-existing item")
+        {
+            containers::SingleLinkedList<int> list;
+            list.pushFront(3);
+            list.pushFront(2);
+            list.pushFront(1);
+            // removing non-existing item causes exception
+            REQUIRE_THROWS_AS(list.remove(4), containers::Exception);
+        }
+
+        SECTION("2 items, remove last")
+        {
+            containers::SingleLinkedList<int> list;
+            list.pushFront(2);
+            list.pushFront(1);
+            // remove last
+            list.remove(1);
+
+            containers::SingleLinkedList<int> expected;
+            expected.pushFront(2);
+            REQUIRE(list == expected);
+        }
+
+        SECTION("2 items, remove first")
+        {
+            containers::SingleLinkedList<int> list;
+            list.pushFront(2);
+            list.pushFront(1);
+            // remove item from middle
+            list.remove(2);
+
+            containers::SingleLinkedList<int> expected;
+            expected.pushFront(1);
+            REQUIRE(list == expected);
+        }
+
+        SECTION("2 items, remove non-existing item")
+        {
+            containers::SingleLinkedList<int> list;
+            list.pushFront(2);
+            list.pushFront(1);
+            // removing non-existing item causes exception
+            REQUIRE_THROWS_AS(list.remove(4), containers::Exception);
+        }
+
+        SECTION("1 items, remove existing item")
+        {
+            containers::SingleLinkedList<int> list;
+            list.pushFront(1);
+            // remove last
+            list.remove(1);
+
+            containers::SingleLinkedList<int> expected;
+            REQUIRE(list == expected);
+        }
+
+        SECTION("1 items, remove non-existing item")
+        {
+            containers::SingleLinkedList<int> list;
+            list.pushFront(1);
+            // removing non-existing item causes exception
+            REQUIRE_THROWS_AS(list.remove(4), containers::Exception);
+        }
+
+        SECTION("0 items, remove non-existing item")
+        {
+            containers::SingleLinkedList<int> list;
+            // removing from empty list causes panic
+            REQUIRE_THROWS_AS(list.remove(4), containers::Exception);
+        }
     }
 
-    SECTION("remove middle")
+    SECTION("insertAfter")
     {
-        containers::SingleLinkedList<int> list;
-        list.pushFront(3);
-        list.pushFront(2);
-        list.pushFront(1);
-        // remove item from middle
-        list.remove(2);
+        SECTION("2 items, insert after first")
+        {
+            containers::SingleLinkedList<int> list;
+            list.pushFront(3);
+            list.pushFront(1);
+            list.insertAfter(1, 2);
 
-        containers::SingleLinkedList<int> expected;
-        expected.pushFront(3);
-        expected.pushFront(1);
-        REQUIRE(list == expected);
-    }
+            containers::SingleLinkedList<int> expected;
+            expected.pushFront(3);
+            expected.pushFront(2);
+            expected.pushFront(1);
+            REQUIRE(list == expected);
+        }
 
-    SECTION("remove tail")
-    {
-        containers::SingleLinkedList<int> list;
-        list.pushFront(3);
-        list.pushFront(2);
-        list.pushFront(1);
-        // remove item from middle
-        list.remove(3);
+        SECTION("2 items, insert after last")
+        {
+            containers::SingleLinkedList<int> list;
+            list.pushFront(2);
+            list.pushFront(1);
+            list.insertAfter(2, 3);
 
-        containers::SingleLinkedList<int> expected;
-        expected.pushFront(2);
-        expected.pushFront(1);
-        REQUIRE(list == expected);
-    }
+            containers::SingleLinkedList<int> expected;
+            expected.pushFront(3);
+            expected.pushFront(2);
+            expected.pushFront(1);
+            REQUIRE(list == expected);
+        }
 
-    SECTION("remove non-existing item")
-    {
-        containers::SingleLinkedList<int> list;
-        list.pushFront(3);
-        list.pushFront(2);
-        list.pushFront(1);
-        // removing non-existing item causes exception
-        REQUIRE_THROWS_AS(list.remove(4), containers::Exception);
-    }
+        SECTION("1 item, insert after existing")
+        {
+            containers::SingleLinkedList<int> list;
+            list.pushFront(1);
+            list.insertAfter(1, 2);
 
-    SECTION("remove from empty list")
-    {
-        containers::SingleLinkedList<int> list;
-        // removing from empty list causes panic
-        REQUIRE_THROWS_AS(list.remove(4), containers::Exception);
+            containers::SingleLinkedList<int> expected;
+            expected.pushFront(2);
+            expected.pushFront(1);
+            REQUIRE(list == expected);
+        }
+
+        SECTION("1 items, insert after non-existing")
+        {
+            containers::SingleLinkedList<int> list;
+            list.pushFront(1);
+            REQUIRE_THROWS_AS(list.insertAfter(2, 3), containers::Exception);
+        }
+
+        SECTION("0 items, insert after")
+        {
+            containers::SingleLinkedList<int> list;
+            REQUIRE_THROWS_AS(list.insertAfter(2, 3), containers::Exception);
+        }
     }
 
     SECTION("reuse emptied list")
